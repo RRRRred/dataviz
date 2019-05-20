@@ -15,9 +15,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Data visualisation try-out
 
-Download texas_cancer data
+# Load packages
+```{r}
+library(readr)
+library(tidyverse)
+```
 
-Source: https://www.cancer-rates.info/tx/
+# Download texas_cancer data
+
+Source: <https://www.cancer-rates.info/tx/>
 
 removed first 2 rows from original .csv file: 
 
@@ -30,7 +36,6 @@ removed last 3 rows from original .csv file:
 2. Rates generated on May 20, 2019.
 3. Cancer Incidence File, Jan 2019.
 ```{r}
-library(readr)
 texas <- read.csv("C:/Users/Eigenaar/Documents/R cursus EUR/dataset cancer Texas.csv", header = TRUE, sep = ",")
 str(texas)
 head(texas)
@@ -38,22 +43,32 @@ texas2 <- read_csv("C:/Users/Eigenaar/Documents/R cursus EUR/dataset cancer Texa
 head(texas2)
 ```
 
-## R Markdown
+# Top 10 counties with largest cancer rate
+```{r}
+texas %>% summarise(max(Crude.Rate))
+texas2 %>% summarise(max(`Crude Rate`))
+texas2 %>% arrange(desc(`Crude Rate`)) %>% filter(`Crude Rate` >= 714)
+```
+Question: why is the tibble frame rounded to 835, and the dataframe not at 835.2.
+Qestion: when are `` backticks needed around variable names for a tibble
+Question: when in the middle of data analysis is a tibble to be preferred over a dataframe? Why?
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+# Top 10 counties with lowest cancer rate
+```{r}
+texas %>% summarise(min(Crude.Rate))
+texas2 %>% summarise(min(`Crude Rate`))
+texas2 %>% arrange(`Crude Rate`) %>% filter(`Crude Rate` <= 293)
 ```
 
-## Including Plots
+# Data visualisation: show the different cancer rates, both crude and age adjusted for the 10 counties with the lowest cancer rate
+```{r}
+plot(texas$County, texas$Crude.Rate)
+texas_ar <- texas2 %>% arrange(`Crude Rate`) %>% filter(`Crude Rate` <= 293)
+texas_ar %>% ggplot(aes(x = reorder(`County`, `Crude Rate`), y = `Crude Rate`)) + geom_col() + labs (x = "Counties",
+                                                                              y = "Crude cancer rates",
+                                                                              title = "Top 10 Texas counties with lowest cancer rates") +
+  theme_minimal()
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
+str(texas2)
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
