@@ -36,10 +36,10 @@ removed last 3 rows from original .csv file:
 2. Rates generated on May 20, 2019.
 3. Cancer Incidence File, Jan 2019.
 ```{r}
-texas <- read.csv("C:/Users/Eigenaar/Documents/R cursus EUR/git_workspace/dataviz/dataset cancer Texas.csv", header = TRUE, sep = ",")
+texas <- read.csv("dataset cancer Texas.csv", header = TRUE, sep = ",")
 str(texas)
 head(texas)
-texas2 <- read_csv("C:/Users/Eigenaar/Documents/R cursus EUR/git_workspace/dataviz/dataset cancer Texas.csv")
+texas2 <- read_csv("dataset cancer Texas.csv")
 head(texas2)
 ```
 
